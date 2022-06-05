@@ -27,14 +27,14 @@ class Paddle:
             self.y += self.VELO
 
 class Ball:
-    MAX_VELO = c.BALL_VELO
+    VELO = c.BALL_VELO
     COLOR = c.WHITE
 
     def __init__(self, x, y, radius):
         self.x = x
         self.y = y
         self.radius = radius
-        self.x_velo = self.MAX_VELO
+        self.x_velo = self.VELO
         self.y_velo = 0
 
     def render_ball(self, win):
@@ -69,10 +69,22 @@ def handle_collision(ball, left_paddle, right_paddle):
         if ball.y >= left_paddle.y and ball.y <= left_paddle.y + left_paddle.height:
             if ball.x - ball.radius <= left_paddle.x + left_paddle.width:
                 ball.x_velo *= -1
+
+                middle_y = left_paddle.y + left_paddle.height//2
+                diff_y = middle_y - ball.y
+                reduction_factor = (left_paddle.height//2) / ball.VELO
+                
+                ball.y_velo = (diff_y / reduction_factor) * -1
     else:
         if ball.y >= right_paddle.y and ball.y <= right_paddle.y + right_paddle.height:
             if ball.x + ball.radius >= right_paddle.x:
                 ball.x_velo *= -1
+
+                middle_y = right_paddle.y + right_paddle.height//2
+                diff_y = middle_y - ball.y
+                reduction_factor = (right_paddle.height//2) / ball.VELO
+                
+                ball.y_velo = (diff_y / reduction_factor) * -1
 
 def render_game(win, paddles, ball):
     win.fill(c.BLACK)
