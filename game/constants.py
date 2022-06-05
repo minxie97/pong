@@ -1,3 +1,6 @@
+import pygame
+pygame.init()
+
 #screen
 WIDTH, HEIGHT = 800, 600
 
@@ -18,3 +21,6 @@ BALL_VELO = 5
 
 #score
 WIN = 10
+
+#font
+FONT = pygame.font.Font("../assets/ARCADECLASSIC.TTF", 50)
