@@ -1,10 +1,13 @@
 import pygame
 import constants as c
+import random
 
 pygame.init()
 
 WINDOW = pygame.display.set_mode((c.WIDTH, c.HEIGHT))
 pygame.display.set_caption("PONG")
+
+FONT = pygame.font.Font("assets/ARCADECLASSIC.TTF", 50)
 
 class Paddle:
 
@@ -12,8 +15,8 @@ class Paddle:
     VELO = c.PADDLE_VELO
 
     def __init__(self, x, y, width, height):
-        self.x = x
-        self.y = y
+        self.x = self.starting_x = x
+        self.y = self.starting_y = y
         self.width = width
         self.height = height
 
@@ -26,13 +29,17 @@ class Paddle:
         else:
             self.y += self.VELO
 
+    def reset(self):
+        self.x = self.starting_x
+        self.y = self.starting_y
+
 class Ball:
     VELO = c.BALL_VELO
     COLOR = c.WHITE
 
     def __init__(self, x, y, radius):
-        self.x = x
-        self.y = y
+        self.x = self.starting_x = x
+        self.y = self.starting_y = y
         self.radius = radius
         self.x_velo = self.VELO
         self.y_velo = 0
@@ -43,6 +50,13 @@ class Ball:
     def move(self):
         self.x += self.x_velo
         self.y += self.y_velo
+
+    def reset(self):
+        self.x = self.starting_x
+        self.y = self.starting_y
+        self.x_velo *= -1
+        self.y_velo = random.randint(-2, 2)
+
 
 def handle_paddle_move(keys, left_paddle, right_paddle):
     #left
@@ -86,8 +100,13 @@ def handle_collision(ball, left_paddle, right_paddle):
                 
                 ball.y_velo = (diff_y / reduction_factor) * -1
 
-def render_game(win, paddles, ball):
+def render_game(win, paddles, ball, left_score, right_score):
     win.fill(c.BLACK)
+
+    left_score_text = FONT.render(f"{left_score}", 1, c.WHITE)
+    right_score_text = FONT.render(f"{right_score}", 1, c.WHITE)
+    win.blit(left_score_text, (c.WIDTH//4 - left_score_text.get_width()//2, 20))
+    win.blit(right_score_text, (c.WIDTH * (3/4) - right_score_text.get_width()//2, 20))
 
     for paddle in paddles:
         paddle.render_paddle(win)
@@ -102,7 +121,6 @@ def render_game(win, paddles, ball):
 
     pygame.display.update()
 
-
 def main():
     running = True
     clock = pygame.time.Clock()
@@ -112,9 +130,12 @@ def main():
 
     ball = Ball(c.WIDTH//2, c.HEIGHT//2, c.BALL_RADIUS)
 
+    left_score = 0
+    right_score = 0
+
     while running:
         clock.tick(c.FPS)
-        render_game(WINDOW, [left_paddle, right_paddle], ball)
+        render_game(WINDOW, [left_paddle, right_paddle], ball, left_score, right_score)
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -126,6 +147,34 @@ def main():
 
         ball.move()
         handle_collision(ball, left_paddle, right_paddle)
+
+        if ball.x < 0:
+            right_score += 1
+            ball.reset()
+        elif ball.x > c.WIDTH:
+            left_score += 1
+            ball.reset()
+
+        game_over = False
+
+        if left_score >= c.WIN:
+            game_over = True
+            win_text = "Left won!"
+        elif right_score >= c.WIN:
+            game_over = True
+            win_text = "Right won!"
+
+        if game_over:
+            text = FONT.render(win_text, 1, c.WHITE)
+            WINDOW.fill(c.BLACK)
+            WINDOW.blit(text, (c.WIDTH//2 - text.get_width()//2, c.HEIGHT//2 - text.get_height()//2))
+            pygame.display.update()
+            pygame.time.delay(5000)
+            ball.reset()
+            left_paddle.reset()
+            right_paddle.reset()
+            left_score = 0
+            right_score = 0
 
     pygame.quit()
 
