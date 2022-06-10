@@ -1,4 +1,5 @@
 from .constants import *
+import pygame
 
 def render_score(win, left_score, right_score):
     left_score_text = FONT.render(f"{left_score}", 1, WHITE)

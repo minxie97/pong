@@ -1,4 +1,6 @@
 import pygame
+import os, sys
+
 pygame.init()
 
 #screen
@@ -24,4 +26,4 @@ BALL_VELO = 5
 WIN = 10
 
 #font
-FONT = pygame.font.Font("/Users/minxie/Desktop/projects/pong/assets/ARCADECLASSIC.TTF", 50)
+FONT = pygame.font.Font(os.path.join(sys.path[0], "assets/ARCADECLASSIC.TTF"), 50)
