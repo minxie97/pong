@@ -1,10 +1,7 @@
-import constants as c
+from .constants import *
 import pygame
 
 class Paddle:
-
-    COLOR = c.WHITE
-    VELO = c.PADDLE_VELO
 
     def __init__(self, x, y, width, height):
         self.x = self.starting_x = x
@@ -13,13 +10,13 @@ class Paddle:
         self.height = height
 
     def render_paddle(self, win):
-        pygame.draw.rect(win, self.COLOR, (self.x, self.y, self.width, self.height))
+        pygame.draw.rect(win, WHITE, (self.x, self.y, self.width, self.height))
 
     def move(self, up=True):
         if up:
-            self.y -= self.VELO
+            self.y -= PADDLE_VELO
         else:
-            self.y += self.VELO
+            self.y += PADDLE_VELO
 
     def reset(self):
         self.x = self.starting_x

@@ -10,6 +10,7 @@ FPS = 60
 #colors
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
+GOLD = (255, 215, 0)
 
 #paddles
 PADDLE_WIDTH, PADDLE_HEIGHT = 20, 100
@@ -23,4 +24,4 @@ BALL_VELO = 5
 WIN = 10
 
 #font
-FONT = pygame.font.Font("../assets/ARCADECLASSIC.TTF", 50)
+FONT = pygame.font.SysFont("../assets/ARCADECLASSIC.TTF", 50)
