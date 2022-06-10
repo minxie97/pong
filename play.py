@@ -3,7 +3,6 @@ from game import Game
 import neat
 import os
 import pickle
-import time
 
 class Play:
     def __init__(self):
@@ -44,7 +43,7 @@ class Play:
                 self.game.move_paddle(left=True, up=False)
 
 
-            game_info = self.game.loop()
+            self.game.loop()
             self.game.render(draw_score=True, draw_hits=False)
             pygame.display.update()
 

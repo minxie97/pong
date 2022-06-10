@@ -24,4 +24,4 @@ BALL_VELO = 5
 WIN = 10
 
 #font
-FONT = pygame.font.SysFont("../assets/ARCADECLASSIC.TTF", 50)
+FONT = pygame.font.Font("/Users/minxie/Desktop/projects/pong/assets/ARCADECLASSIC.TTF", 50)

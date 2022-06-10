@@ -1,4 +1,3 @@
-import pygame
 from .constants import *
 
 def render_score(win, left_score, right_score):
