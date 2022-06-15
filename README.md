@@ -12,7 +12,9 @@ A playable version of the classic PONG game complete with an AI opponent trained
 ## How it Works
 The Pong AI is created using a algorithm that takes a population of 50 neural networks with different "genomes" and puts them into the Pong game to play against each other. Each genome is rated for their fitness, which is calculated through how many hits the genome achieves, how long a match lasts, and amount of movement. The best performing genomes from the generation are taken and bred to create a population for the next generation. This generational cycle repeats until a genome meets the determined fitness threshold, and that genome is saved as the opponent AI. 
 
-The opponent AI controls the right paddle while the user plays with the right paddle. Control the user paddle using `w` for up and `s` for down.
+The opponent AI controls the right paddle while the user plays with the right paddle. 
+
+Control the user paddle using `w` for up and `s` for down.
 
 
 
