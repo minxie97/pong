@@ -3,6 +3,8 @@ __pycache__/
 *$py.class
 .DS_Store
 
+neat-checkpoint*
+
 # C extensions
 *.so
 

@@ -1,4 +1,6 @@
 import pygame
+import os, sys
+
 pygame.init()
 
 #screen
@@ -21,7 +23,7 @@ BALL_RADIUS = 7
 BALL_VELO = 5
 
 #score
-WIN = 10
+WIN_SCORE = 11
 
 #font
-FONT = pygame.font.SysFont("../assets/ARCADECLASSIC.TTF", 50)
+FONT = pygame.font.Font("assets/ARCADECLASSIC.TTF", 50)
