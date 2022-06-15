@@ -23,7 +23,7 @@ BALL_RADIUS = 7
 BALL_VELO = 5
 
 #score
-WIN = 10
+WIN_SCORE = 11
 
 #font
-FONT = pygame.font.Font(os.path.join(sys.path[0], "assets/ARCADECLASSIC.TTF"), 50)
+FONT = pygame.font.Font("assets/ARCADECLASSIC.TTF", 50)

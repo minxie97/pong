@@ -1,7 +1,8 @@
 import pygame
+import random
 from .paddles import Paddle
 from .ball import Ball
-from .score import render_score
+from. boom import Boom
 from .constants import *
 
 pygame.init()
@@ -18,10 +19,13 @@ class Game:
         self.win_width = WIDTH
         self.win_height = HEIGHT
         self.win = pygame.display.set_mode((WIDTH, HEIGHT))
+        pygame.display.set_caption("Pong")
         
         self.left_paddle = Paddle(10, HEIGHT//2 - PADDLE_HEIGHT//2, PADDLE_WIDTH, PADDLE_HEIGHT)
         self.right_paddle = Paddle(WIDTH - 10 - PADDLE_WIDTH, HEIGHT//2 - PADDLE_HEIGHT//2, PADDLE_WIDTH, PADDLE_HEIGHT)
         self.ball = Ball(WIDTH//2, HEIGHT//2, BALL_RADIUS)
+
+        self.boom = pygame.sprite.Group()
 
         self.left_score = 0
         self.right_score = 0
@@ -29,6 +33,12 @@ class Game:
         self.left_hits = 0
         self.right_hits = 0
 
+    def render_score(self):
+        left_score_text = FONT.render(f"{self.left_score}", 1, WHITE)
+        right_score_text = FONT.render(f"{self.right_score}", 1, WHITE)
+        self.win.blit(left_score_text, (WIDTH//4 - left_score_text.get_width()//2, 20))
+        self.win.blit(right_score_text, (WIDTH * (3/4) - right_score_text.get_width()//2, 20))
+        
     def render_hits(self):
         hits_text = FONT.render(f"{self.left_hits + self.right_hits}", 1, GOLD)
         self.win.blit(hits_text, (self.win_width/2 - hits_text.get_width()//2, 10))
@@ -39,6 +49,13 @@ class Game:
                 continue
             else:
                 pygame.draw.rect(self.win, WHITE, (WIDTH//2 - 5, i, 10, HEIGHT//24))
+
+    def score_boom(self, pos):
+        for _ in range(random.randrange(10, 30)):
+            particle = Boom()
+            particle.rect.x = pos[0]
+            particle.rect.y = pos[1]
+            self.boom.add(particle)
 
     def handle_collision(self):
         ball = self.ball
@@ -96,10 +113,14 @@ class Game:
         self.render_divider()
 
         if draw_score:
-            render_score(self.win, self.left_score, self.right_score)
+            self.render_score()
 
         if draw_hits:
             self.render_hits()
+
+        if self.boom:
+            self.boom.draw(self.win)
+            self.boom.update()
 
         for paddle in [self.left_paddle, self.right_paddle]:
             paddle.render_paddle(self.win)
@@ -112,11 +133,31 @@ class Game:
         self.handle_collision()
 
         if self.ball.x < 0:
+            self.score_boom((self.ball.x, self.ball.y))
             self.ball.reset()
             self.right_score += 1
         elif self.ball.x > self.win_width:
+            self.score_boom((self.ball.x, self.ball.y))
             self.ball.reset()
             self.left_score += 1
+
+        won = False
+        if self.left_score >= WIN_SCORE:
+            won = True
+            win_text = "You Won!"
+        elif self.right_score >= WIN_SCORE:
+            won = True
+            win_text = "AI Won!"
+
+        if won:
+            self.win.fill(BLACK)
+            for particle in self.boom:
+                particle.kill()
+            text = FONT.render(win_text, 1, WHITE)
+            self.win.blit(text, (WIDTH//2 - text.get_width()//2, HEIGHT//2 - text.get_height()//2))
+            pygame.display.update()
+            pygame.time.delay(4000)
+            self.reset()
 
         game_info = GameInfo(self.left_hits, self.right_hits, self.left_score, self.right_score)
 
